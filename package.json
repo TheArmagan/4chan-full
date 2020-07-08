@@ -1,0 +1,24 @@
+{
+  "name": "4chan-full",
+  "version": "1.0.1",
+  "description": "www.4chan.org non-official read only api",
+  "main": "index.js",
+  "dependencies": {
+    "got": "^11.4.0",
+    "jsdom": "^16.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "4chan",
+    "api",
+    "datapipe",
+    "full",
+    "readonly",
+    "4chan-full"
+  ],
+  "author": "Kıraç Armağan Önal",
+  "license": "Apache-2.0"
+}
