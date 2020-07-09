@@ -14,7 +14,7 @@ function parseBody(siteBodyHTML="") {
         board: boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent),
         threads: trs.map(e=>{
             return {
-                thread: parseInt(e.cells[0].textContent),
+                id: parseInt(e.cells[0].textContent),
                 teaser: e.cells[1].textContent
             }
         })

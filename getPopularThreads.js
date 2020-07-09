@@ -17,7 +17,7 @@ function parseBody(siteBodyHTML="") {
                 code: e.querySelector("a").getAttribute("href").split("/")[3],
                 name: e.querySelector(".c-board").textContent
             },
-            thread: parseInt(e.querySelector("a").getAttribute("href").split("/")[5]),
+            id: parseInt(e.querySelector("a").getAttribute("href").split("/")[5]),
             thumbnail: "https:"+e.querySelector(".c-thumb").getAttribute("src"),
             teaser: e.querySelector(".c-teaser").textContent
         }

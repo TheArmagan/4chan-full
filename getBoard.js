@@ -13,7 +13,7 @@ function parseBody(siteBodyHTML="") {
             return {
                 id: parseInt(e.id.replace(/[^0-9]/g,"")),
                 subject: e.querySelector(".op .desktop .subject").textContent,
-                message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, "[$1]") : "",
+                message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
                 date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc")),
                 file: e.querySelector(".file") ? {
                     exists: true,
