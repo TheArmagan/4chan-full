@@ -10,7 +10,6 @@ function parseBody(siteBodyHTML="") {
     let result = { 
         board: boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent),
         threads: Array.from(document.querySelectorAll(".thread")).map(e=>{
-            let summary = e.querySelector(".summary.desktop span").textContent.split(" ");
             return {
                 id: parseInt(e.id.replace(/[^0-9]/g,"")),
                 subject: e.querySelector(".op .desktop .subject").textContent,
@@ -21,11 +20,7 @@ function parseBody(siteBodyHTML="") {
                     url: "https:"+e.querySelector(".fileText a").getAttribute("href"),
                     name: e.querySelector(".fileText a").title ? e.querySelector(".fileText a").title : e.querySelector(".fileText a").textContent,
                     size: fileTextToSizeInfo(e.querySelector(".fileText").textContent)
-                } : {exists: false},
-                amounts: {
-                    replies: parseInt(summary[0]),
-                    files: summary.length == 10 ? parseInt(summary[3]) : 0
-                }
+                } : {exists: false}
             }
         }),
         page: parseInt(document.querySelector(".pages strong").textContent),
@@ -38,7 +33,7 @@ function parseBody(siteBodyHTML="") {
 }
 
 async function getBody(board="", page=1, dataPipe="") {
-    let threadURL = `https://boards.4channel.org/${board}/${page == 1 ? "" : page}`;
+    let threadURL = `https://boards.4channel.org/${board}/${page <= 1 ? "" : page}`;
     let bodyHTML = await got.get(dataPipe+threadURL, {resolveBodyOnly: true});
     return bodyHTML;
 }
