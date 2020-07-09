@@ -1,6 +1,6 @@
 {
   "name": "4chan-full",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "www.4chan.org non-official read only api",
   "main": "index.js",
   "dependencies": {

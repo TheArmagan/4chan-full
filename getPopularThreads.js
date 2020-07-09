@@ -1,12 +1,16 @@
-let { JSDOM } = require("jsdom");
+let {
+    JSDOM
+} = require("jsdom");
 let got = require("got").default;
-let { convertSafetyType } = require("./utils");
+let {
+    convertSafetyType
+} = require("./utils");
 
 /**
  * @typedef {"ws"|"WORKSAFE"|0|"nws"|"nsfw"|"NOTSAFE"|"NOTWORKSAFE"|1|"all"|"ALL"|"COMBINED"|2} SafetyType
  */
 
-function parseBody(siteBodyHTML="") {
+function parseBody(siteBodyHTML = "") {
 
     let dom = new JSDOM(siteBodyHTML);
     let document = dom.window.document;
@@ -18,7 +22,7 @@ function parseBody(siteBodyHTML="") {
                 name: e.querySelector(".c-board").textContent
             },
             id: parseInt(e.querySelector("a").getAttribute("href").split("/")[5]),
-            thumbnail: "https:"+e.querySelector(".c-thumb").getAttribute("src"),
+            thumbnail: "https:" + e.querySelector(".c-thumb").getAttribute("src"),
             teaser: e.querySelector(".c-teaser").textContent
         }
     })
@@ -31,16 +35,22 @@ function parseBody(siteBodyHTML="") {
 /**
  * @param {SafetyType} type
  */
-async function getBody(type="WORKSAFE", dataPipe="") {
+async function getBody(type = "WORKSAFE", dataPipe = "") {
     let convertedType = convertSafetyType(type);
-    let bodyHTML = await got.get(dataPipe+"https://www.4chan.org/", {resolveBodyOnly: true, cookieJar: {fpc: convertedType}});
+    let bodyHTML = await got.get(dataPipe + "https://www.4chan.org/", {
+        resolveBodyOnly: true,
+        headers: {
+            "cookie": `fpc=${convertedType}`,
+            "dp-cookie": `fpc=${convertedType}` // For datapipe
+        }
+    });
     return bodyHTML;
 }
 
 /**
  * @param {SafetyType} type
  */
-async function getPopularThreads(type="WORKSAFE", dataPipe="") {
+async function getPopularThreads(type = "WORKSAFE", dataPipe = "") {
     let bodyHTML = await getBody(type, dataPipe);
     let parsedBody = parseBody(bodyHTML);
     return parsedBody;
