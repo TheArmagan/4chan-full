@@ -1,6 +1,7 @@
 let { JSDOM } = require("jsdom");
 let got = require("got").default;
 let { boardTitleToBoardNameInfo } = require("./utils");
+let getThread = require("./getThread");
 
 function parseBody(siteBodyHTML="") {
 
@@ -10,12 +11,18 @@ function parseBody(siteBodyHTML="") {
     let trs = Array.from(document.querySelectorAll("#arc-list tr"));
     trs.shift();
 
+    let board = boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent);
+
     let result = {
-        board: boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent),
+        board,
         threads: trs.map(e=>{
+            let id = parseInt(e.cells[0].textContent);
             return {
-                id: parseInt(e.cells[0].textContent),
-                teaser: e.cells[1].textContent
+                id,
+                teaser: e.cells[1].textContent,
+                thread(dataPipe="") {
+                    return getThread(board.name, id, dataPipe);
+                }
             }
         })
     };

@@ -1,20 +1,27 @@
 let { JSDOM } = require("jsdom");
 let got = require("got").default;
 let { fileTextToSizeInfo, boardTitleToBoardNameInfo } = require("./utils");
+let getThread = require("./getThread");
 
 function parseBody(siteBodyHTML="") {
 
     let dom = new JSDOM(siteBodyHTML);
     let document = dom.window.document;
 
+    let board = boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent);
+
     let result = { 
-        board: boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent),
+        board,
         threads: Array.from(document.querySelectorAll(".thread")).map(e=>{
+            let id = parseInt(e.id.replace(/[^0-9]/g,""));
             return {
-                id: parseInt(e.id.replace(/[^0-9]/g,"")),
+                id,
+                thread(dataPipe="") {
+                    return getThread(board.name, id, dataPipe);
+                },
                 subject: e.querySelector(".op .desktop .subject").textContent,
                 message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
-                date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc")),
+                date: new Date(parseInt(e.querySelector(".dateTime").getAttribute("data-utc"))),
                 file: e.querySelector(".file") ? {
                     exists: true,
                     url: "https:"+e.querySelector(".fileText a").getAttribute("href"),

@@ -1,10 +1,7 @@
-let {
-    JSDOM
-} = require("jsdom");
+let {JSDOM} = require("jsdom");
 let got = require("got").default;
-let {
-    convertSafetyType
-} = require("./utils");
+let {convertSafetyType} = require("./utils");
+let getThread = require("./getThread");
 
 /**
  * @typedef {"ws"|"WORKSAFE"|0|"nws"|"nsfw"|"NOTSAFE"|"NOTWORKSAFE"|1|"all"|"ALL"|"COMBINED"|2} SafetyType
@@ -16,12 +13,17 @@ function parseBody(siteBodyHTML = "") {
     let document = dom.window.document;
 
     let result = Array.from(document.querySelectorAll(".c-thread")).map(e => {
+        let id = parseInt(e.querySelector("a").getAttribute("href").split("/")[5]);
+        let boardName = e.querySelector(".c-board").textContent;
         return {
             board: {
                 code: e.querySelector("a").getAttribute("href").split("/")[3],
-                name: e.querySelector(".c-board").textContent
+                name: boardName
             },
-            id: parseInt(e.querySelector("a").getAttribute("href").split("/")[5]),
+            id,
+            thread(dataPipe="") {
+                return getThread(boardName, id, dataPipe);
+            },
             thumbnail: "https:" + e.querySelector(".c-thumb").getAttribute("src"),
             teaser: e.querySelector(".c-teaser").textContent
         }
@@ -58,4 +60,4 @@ async function getPopularThreads(type = "WORKSAFE", dataPipe = "") {
 
 module.exports = getPopularThreads;
 module.exports.getBody = getBody;
-module.exports.parseBody = parseBody
+module.exports.parseBody = parseBody;

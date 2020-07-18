@@ -21,7 +21,7 @@ function parseBody(siteBodyHTML="") {
                     exists: true,
                     size: fileTextToSizeInfo(e.querySelector(".fileText").textContent)
                 } : { exists: false },
-                date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc"))
+                date: new Date(parseInt(e.querySelector(".dateTime").getAttribute("data-utc")))
             }
         }),
         isArchived: Boolean(document.querySelector(".closed"))

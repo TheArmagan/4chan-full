@@ -51,9 +51,17 @@ FCHF.getThread("w","2148861", "https://kao-datapipe-2.herokuapp.com/").then(thre
 
 --- 
 
-### Methods
+### Update 1.0.6
 
-<sub><sup>I am too lazy to add this area. 😂 (But i am gonna add really soon™️)</sup></sub>
+You can get thread directly from getBoard response or getPopularThreads response. **Example:**
+```js
+FCHF.getBoard().then(async board=>{
+    let firstThread = await board.threads[0].thread();
+    console.log(firstThread);
+})
+```
+
+
     
 
 
