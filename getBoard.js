@@ -21,7 +21,7 @@ function parseBody(siteBodyHTML="") {
                 },
                 subject: e.querySelector(".op .desktop .subject").textContent,
                 message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
-                date: new Date(parseInt(e.querySelector(".dateTime").getAttribute("data-utc"))),
+                date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc")),
                 file: e.querySelector(".file") ? {
                     exists: true,
                     url: "https:"+e.querySelector(".fileText a").getAttribute("href"),
