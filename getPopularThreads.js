@@ -50,7 +50,8 @@ async function getBody(type = "WORKSAFE", dataPipe = "") {
 }
 
 /**
- * @param {SafetyType} type
+ * @param {SafetyType} type Safety Type
+ * @param {String} dataPipe DataPipe URL
  */
 async function getPopularThreads(type = "WORKSAFE", dataPipe = "") {
     let bodyHTML = await getBody(type, dataPipe);

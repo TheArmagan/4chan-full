@@ -1,6 +1,6 @@
 let { JSDOM } = require("jsdom");
 let got = require("got").default;
-let { fileTextToSizeInfo, boardTitleToBoardNameInfo } = require("./utils");
+let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject } = require("./utils");
 
 function parseBody(siteBodyHTML="") {
     let dom = new JSDOM(siteBodyHTML);
@@ -15,12 +15,7 @@ function parseBody(siteBodyHTML="") {
             return {
                 id: parseInt(e.id.replace(/[^0-9]/g, "")),
                 message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
-                file: e.querySelector(".file") ? {
-                    name: e.querySelector(".fileText a").getAttribute("title") ? e.querySelector(".fileText a").getAttribute("title") : e.querySelector(".fileText a").textContent,
-                    url: "https:" + e.querySelector(".fileText a").getAttribute("href"),
-                    exists: true,
-                    size: fileTextToSizeInfo(e.querySelector(".fileText").textContent)
-                } : { exists: false },
+                file: fileElementToFileObject(e.querySelector(".file")),
                 date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc"))
             }
         }),
@@ -38,6 +33,11 @@ async function getBody(board="", threadId=0, dataPipe="") {
     return bodyHTML;
 }
 
+/**
+ * @param {String} board Board code
+ * @param {Number} threadId Thread id
+ * @param {String} dataPipe DataPipe URL
+ */
 async function getThread(board="", threadId=0, dataPipe="") {
     let bodyHTML = await getBody(board, threadId, dataPipe);
     let bodyJSON = parseBody(bodyHTML);

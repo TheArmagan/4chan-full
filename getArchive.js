@@ -39,6 +39,10 @@ async function getBody(board="", dataPipe="") {
     return bodyHTML;
 }
 
+/**
+ * @param {String} board Board code
+ * @param {String} dataPipe DataPipe url
+ */
 async function getArchive(board="", dataPipe="") {
     let bodyHTML = await getBody(board, dataPipe);
     let parsedBody = parseBody(bodyHTML);

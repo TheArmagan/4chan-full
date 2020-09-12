@@ -1,7 +1,8 @@
 let { JSDOM } = require("jsdom");
 let got = require("got").default;
-let { fileTextToSizeInfo, boardTitleToBoardNameInfo } = require("./utils");
+let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject } = require("./utils");
 let getThread = require("./getThread");
+let getArchive = require("./getArchive");
 
 function parseBody(siteBodyHTML="") {
 
@@ -22,16 +23,14 @@ function parseBody(siteBodyHTML="") {
                 subject: e.querySelector(".op .desktop .subject").textContent,
                 message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
                 date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc")),
-                file: e.querySelector(".file") ? {
-                    exists: true,
-                    url: "https:"+e.querySelector(".fileText a").getAttribute("href"),
-                    name: e.querySelector(".fileText a").title ? e.querySelector(".fileText a").title : e.querySelector(".fileText a").textContent,
-                    size: fileTextToSizeInfo(e.querySelector(".fileText").textContent)
-                } : {exists: false}
+                file: fileElementToFileObject(e.querySelector(".file"))
             }
         }),
         page: parseInt(document.querySelector(".pages strong").textContent),
-        hasNextPage: Boolean(document.querySelector(".next .pageSwitcherForm"))
+        hasNextPage: Boolean(document.querySelector(".next .pageSwitcherForm")),
+        archive(dataPipe="") {
+            return getArchive(board.code, dataPipe);
+        }
     }
 
     dom = 0;
@@ -46,10 +45,9 @@ async function getBody(board="", page=1, dataPipe="") {
 }
 
 /**
- * 
- * @param {String} board 
- * @param {Number} page 
- * @param {String} dataPipe 
+ * @param {String} board Board code
+ * @param {Number} page Page number
+ * @param {String} dataPipe DataPipe url
  */
 async function getBoard(board="", page=1, dataPipe="") {
     let bodyHTML = await getBody(board, page, dataPipe);

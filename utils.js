@@ -66,11 +66,24 @@ function fileTextToSizeInfo(ft = "") {
     };
 }
 
+function fileElementToFileObject(e) {
+    if (!e) return { isExists: false };
+    let isSpoiler = Boolean(e.querySelector(".imgspoiler"));
+    return {
+        name: isSpoiler ? e.querySelector(".fileText").getAttribute("title") : (e.querySelector(".fileText a").getAttribute("title") ? e.querySelector(".fileText a").getAttribute("title") : e.querySelector(".fileText a").textContent),
+        url: "https:" + e.querySelector(".fileText a").getAttribute("href"),
+        isExists: true,
+        size: fileTextToSizeInfo(e.querySelector(".fileText").textContent),
+        isSpoiler
+    }
+}
+
 let utils = {
     fileTextToSizeInfo,
     boardTitleToBoardNameInfo,
     convertSafetyType,
-    reverseFormatFileSizeKB
+    reverseFormatFileSizeKB,
+    fileElementToFileObject
 }
 
 module.exports = utils;

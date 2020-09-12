@@ -26,6 +26,9 @@ async function getBody(dataPipe="") {
     return bodyHTML;
 }
 
+/**
+ * @param {String} dataPipe DataPipe URL
+ */
 async function getStats(dataPipe="") {
     let bodyHTML = await getBody(dataPipe);
     let parsedBody = parseBody(bodyHTML);
