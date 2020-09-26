@@ -53,9 +53,9 @@ FCHF.getThread("w","2148861", "https://kao-datapipe-2.herokuapp.com/").then(thre
 
 ### Update 1.0.7
 
-- In file object changed property `exists` to `isExists`
-- Added file object to `isSpoiler` property
-- Now you can get board's archive directly form getBoard
+In file object changed property `exists` to `isExists`
+Added file object to `isSpoiler` property
+Now you can get board's archive directly form getBoard
 
 ### Update 1.0.6
 
