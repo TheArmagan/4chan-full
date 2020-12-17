@@ -3,24 +3,24 @@ let got = require("got").default;
 let { boardTitleToBoardNameInfo } = require("./utils");
 let getThread = require("./getThread");
 
-function parseBody(siteBodyHTML="") {
+function parseBody(siteBodyHTML = "") {
 
     let dom = new JSDOM(siteBodyHTML);
-    let document = dom.window.document;
+    let doc = dom.window.document;
 
-    let trs = Array.from(document.querySelectorAll("#arc-list tr"));
+    let trs = Array.from(doc.querySelectorAll("#arc-list tr"));
     trs.shift();
 
-    let board = boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent);
+    let board = boardTitleToBoardNameInfo(doc.querySelector(".boardTitle").textContent);
 
     let result = {
         board,
-        threads: trs.map(e=>{
+        threads: trs.map(e => {
             let id = parseInt(e.cells[0].textContent);
             return {
                 id,
                 teaser: e.cells[1].textContent,
-                thread(dataPipe="") {
+                thread(dataPipe = "") {
                     return getThread(board.name, id, dataPipe);
                 }
             }
@@ -33,9 +33,9 @@ function parseBody(siteBodyHTML="") {
     return result;
 }
 
-async function getBody(board="", dataPipe="") {
+async function getBody(board = "", dataPipe = "") {
     let archiveURL = `https://boards.4channel.org/${board}/archive`;
-    let bodyHTML = await got.get(dataPipe+archiveURL, {resolveBodyOnly: true});
+    let bodyHTML = await got.get(dataPipe + archiveURL, { resolveBodyOnly: true });
     return bodyHTML;
 }
 
@@ -43,7 +43,7 @@ async function getBody(board="", dataPipe="") {
  * @param {String} board Board code
  * @param {String} dataPipe DataPipe url
  */
-async function getArchive(board="", dataPipe="") {
+async function getArchive(board = "", dataPipe = "") {
     let bodyHTML = await getBody(board, dataPipe);
     let parsedBody = parseBody(bodyHTML);
     return parsedBody;

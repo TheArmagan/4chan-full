@@ -4,20 +4,20 @@ let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject } =
 let getThread = require("./getThread");
 let getArchive = require("./getArchive");
 
-function parseBody(siteBodyHTML="") {
+function parseBody(siteBodyHTML = "") {
 
     let dom = new JSDOM(siteBodyHTML);
-    let document = dom.window.document;
+    let doc = dom.window.document;
 
-    let board = boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent);
+    let board = boardTitleToBoardNameInfo(doc.querySelector(".boardTitle").textContent);
 
-    let result = { 
+    let result = {
         board,
-        threads: Array.from(document.querySelectorAll(".thread")).map(e=>{
-            let id = parseInt(e.id.replace(/[^0-9]/g,""));
+        threads: Array.from(doc.querySelectorAll(".thread")).map(e => {
+            let id = parseInt(e.id.replace(/[^0-9]/g, ""));
             return {
                 id,
-                thread(dataPipe="") {
+                thread(dataPipe = "") {
                     return getThread(board.name, id, dataPipe);
                 },
                 subject: e.querySelector(".op .desktop .subject").textContent,
@@ -26,9 +26,9 @@ function parseBody(siteBodyHTML="") {
                 file: fileElementToFileObject(e.querySelector(".file"))
             }
         }),
-        page: parseInt(document.querySelector(".pages strong").textContent),
-        hasNextPage: Boolean(document.querySelector(".next .pageSwitcherForm")),
-        archive(dataPipe="") {
+        page: parseInt(doc.querySelector(".pages strong").textContent),
+        hasNextPage: Boolean(doc.querySelector(".next .pageSwitcherForm")),
+        archive(dataPipe = "") {
             return getArchive(board.code, dataPipe);
         }
     }
@@ -38,9 +38,9 @@ function parseBody(siteBodyHTML="") {
     return result;
 }
 
-async function getBody(board="", page=1, dataPipe="") {
+async function getBody(board = "", page = 1, dataPipe = "") {
     let threadURL = `https://boards.4channel.org/${board}/${page <= 1 ? "" : page}`;
-    let bodyHTML = await got.get(dataPipe+threadURL, {resolveBodyOnly: true});
+    let bodyHTML = await got.get(dataPipe + threadURL, { resolveBodyOnly: true });
     return bodyHTML;
 }
 
@@ -49,7 +49,7 @@ async function getBody(board="", page=1, dataPipe="") {
  * @param {Number} page Page number
  * @param {String} dataPipe DataPipe url
  */
-async function getBoard(board="", page=1, dataPipe="") {
+async function getBoard(board = "", page = 1, dataPipe = "") {
     let bodyHTML = await getBody(board, page, dataPipe);
     let bodyJSON = parseBody(bodyHTML);
     return bodyJSON;

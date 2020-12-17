@@ -1,6 +1,6 @@
-let {JSDOM} = require("jsdom");
+let { JSDOM } = require("jsdom");
 let got = require("got").default;
-let {convertSafetyType} = require("./utils");
+let { convertSafetyType } = require("./utils");
 let getThread = require("./getThread");
 
 /**
@@ -10,9 +10,9 @@ let getThread = require("./getThread");
 function parseBody(siteBodyHTML = "") {
 
     let dom = new JSDOM(siteBodyHTML);
-    let document = dom.window.document;
+    let doc = dom.window.document;
 
-    let result = Array.from(document.querySelectorAll(".c-thread")).map(e => {
+    let result = Array.from(doc.querySelectorAll(".c-thread")).map(e => {
         let id = parseInt(e.querySelector("a").getAttribute("href").split("/")[5]);
         let boardName = e.querySelector(".c-board").textContent;
         return {
@@ -21,7 +21,7 @@ function parseBody(siteBodyHTML = "") {
                 name: boardName
             },
             id,
-            thread(dataPipe="") {
+            thread(dataPipe = "") {
                 return getThread(boardName, id, dataPipe);
             },
             thumbnail: "https:" + e.querySelector(".c-thumb").getAttribute("src"),

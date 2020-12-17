@@ -2,14 +2,14 @@ let { JSDOM } = require("jsdom");
 let got = require("got").default;
 let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject } = require("./utils");
 
-function parseBody(siteBodyHTML="") {
+function parseBody(siteBodyHTML = "") {
     let dom = new JSDOM(siteBodyHTML);
-    let document = dom.window.document;
+    let doc = dom.window.document;
 
     let result = {
-        subject: document.querySelector(".subject").textContent,
-        board: boardTitleToBoardNameInfo(document.querySelector(".boardTitle").textContent),
-        posts: Array.from(document.querySelectorAll(".postContainer")).map(e => {
+        subject: doc.querySelector(".subject").textContent,
+        board: boardTitleToBoardNameInfo(doc.querySelector(".boardTitle").textContent),
+        posts: Array.from(doc.querySelectorAll(".postContainer")).map(e => {
             let fileSizeInfo = [];
             if (e.querySelector(".file")) fileSizeInfo = fileTextToSizeInfo(e.querySelector(".fileText").textContent);
             return {
@@ -19,7 +19,7 @@ function parseBody(siteBodyHTML="") {
                 date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc"))
             }
         }),
-        isArchived: Boolean(document.querySelector(".closed"))
+        isArchived: Boolean(doc.querySelector(".closed"))
     };
 
     dom = 0;
@@ -27,9 +27,9 @@ function parseBody(siteBodyHTML="") {
     return result;
 }
 
-async function getBody(board="", threadId=0, dataPipe="") {
+async function getBody(board = "", threadId = 0, dataPipe = "") {
     let threadURL = `https://boards.4channel.org/${board}/thread/${threadId}`;
-    let bodyHTML = await got.get(dataPipe+threadURL, {resolveBodyOnly: true});
+    let bodyHTML = await got.get(dataPipe + threadURL, { resolveBodyOnly: true });
     return bodyHTML;
 }
 
@@ -38,7 +38,7 @@ async function getBody(board="", threadId=0, dataPipe="") {
  * @param {Number} threadId Thread id
  * @param {String} dataPipe DataPipe URL
  */
-async function getThread(board="", threadId=0, dataPipe="") {
+async function getThread(board = "", threadId = 0, dataPipe = "") {
     let bodyHTML = await getBody(board, threadId, dataPipe);
     let bodyJSON = parseBody(bodyHTML);
     return bodyJSON;
