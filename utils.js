@@ -1,15 +1,15 @@
 let safetyKeyValues = [{
-        keys: ["ws", "WORKSAFE", 0],
-        value: "ws"
-    },
-    {
-        keys: ["nws", "nsfw", "NOTSAFE", "NOTWORKSAFE", 1],
-        value: "nws"
-    },
-    {
-        keys: ["all", "ALL", "COMBINED", 2],
-        value: "all"
-    }
+    keys: ["ws", "WORKSAFE", 0],
+    value: "ws"
+},
+{
+    keys: ["nws", "nsfw", "NOTSAFE", "NOTWORKSAFE", 1],
+    value: "nws"
+},
+{
+    keys: ["all", "ALL", "COMBINED", 2],
+    value: "all"
+}
 ];
 
 /**
@@ -22,10 +22,11 @@ let safetyKeyValues = [{
  */
 function convertSafetyType(type) {
     let based = safetyKeyValues.find(i => i.keys.some(i => i == type));
-    if (!based) throw new Error(`Invalid safety type. (Only possible: ${safetyKeyValues.map(i=>i.keys).join(", ")})`);
+    if (!based) throw new Error(`Invalid safety type. (Only possible: ${safetyKeyValues.map(i => i.keys).join(", ")})`);
     return based.value;
 }
 
+/** @returns {{code: string, name: string}} */
 function boardTitleToBoardNameInfo(boardTitle = "") {
     let boardTitleSplitted = boardTitle.split("-").map(i => i.trim());
     return {
@@ -34,7 +35,8 @@ function boardTitleToBoardNameInfo(boardTitle = "") {
     };
 }
 
-function reverseFormatFileSizeKB(fileSizeText="0 GB") {
+/** @returns {number} */
+function reverseFormatFileSizeKB(fileSizeText = "0 GB") {
     let splitted = fileSizeText.split(" ");
     let factor = NaN;
 
@@ -55,6 +57,7 @@ function reverseFormatFileSizeKB(fileSizeText="0 GB") {
     return sizeInKB;
 }
 
+/** @returns {{size: string, width: number, height: number}} */
 function fileTextToSizeInfo(ft = "") {
     let info = ft.slice(ft.lastIndexOf("(") + 1, ft.lastIndexOf(")")).split(", ");
     let fileSizeInKB = reverseFormatFileSizeKB(info[0]);
@@ -66,6 +69,7 @@ function fileTextToSizeInfo(ft = "") {
     };
 }
 
+/** @returns {{name?:string,url?:string,isExists:boolean,size:{size: string, width: number, height: number}, isSpoiler: boolean}} */
 function fileElementToFileObject(e) {
     if (!e) return { isExists: false };
     let isSpoiler = Boolean(e.querySelector(".imgspoiler"));
