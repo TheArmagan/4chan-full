@@ -1,6 +1,6 @@
 let { JSDOM } = require("jsdom");
 let got = require("got").default;
-let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject } = require("./utils");
+let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject, parsePostMessage } = require("./utils");
 let getThread = require("./getThread");
 let getArchive = require("./getArchive");
 
@@ -21,7 +21,7 @@ function parseBody(siteBodyHTML = "") {
                     return getThread(board.name, id, dataPipe);
                 },
                 subject: e.querySelector(".op .desktop .subject").textContent,
-                message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
+                message: e.querySelector(".postMessage") ? parsePostMessage(e.querySelector(".postMessage").textContent) : "",
                 date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc")),
                 file: fileElementToFileObject(e.querySelector(".file"))
             }

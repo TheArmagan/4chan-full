@@ -1,6 +1,6 @@
 let { JSDOM } = require("jsdom");
 let got = require("got").default;
-let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject } = require("./utils");
+let { fileTextToSizeInfo, boardTitleToBoardNameInfo, fileElementToFileObject, parsePostMessage } = require("./utils");
 
 function parseBody(siteBodyHTML = "") {
     let dom = new JSDOM(siteBodyHTML);
@@ -14,7 +14,7 @@ function parseBody(siteBodyHTML = "") {
             if (e.querySelector(".file")) fileSizeInfo = fileTextToSizeInfo(e.querySelector(".fileText").textContent);
             return {
                 id: parseInt(e.id.replace(/[^0-9]/g, "")),
-                message: e.querySelector(".postMessage") ? e.querySelector(".postMessage").textContent.replace(/(>>\d+)/gm, " [$1] ") : "",
+                message: e.querySelector(".postMessage") ? parsePostMessage(e.querySelector(".postMessage").textContent) : "",
                 file: fileElementToFileObject(e.querySelector(".file")),
                 date: parseInt(e.querySelector(".dateTime").getAttribute("data-utc"))
             }

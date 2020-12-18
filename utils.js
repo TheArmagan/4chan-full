@@ -82,12 +82,22 @@ function fileElementToFileObject(e) {
     }
 }
 
+/** @returns {{content: string, quotes: Array<{id: string, index: number}>}} */
+function parsePostMessage(t = "") {
+    let matches = Array.from(t.matchAll(/>>(\d+)/gmi));
+    return {
+        content: t,
+        quotes: matches.map(i => ({ id: i[0], index: i.index }))
+    }
+}
+
 let utils = {
     fileTextToSizeInfo,
     boardTitleToBoardNameInfo,
     convertSafetyType,
     reverseFormatFileSizeKB,
-    fileElementToFileObject
+    fileElementToFileObject,
+    parsePostMessage
 }
 
 module.exports = utils;
