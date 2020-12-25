@@ -2,13 +2,15 @@ class File {
 
   /**
    * 
-   * @param {{name: String, size: Number, width: Number, height: Number}} param0
+   * @param {{name: String, size: Number, width: Number, height: Number, url: String, spoiler: Boolean}} param0
    */
-  constructor({ name, size, width, height }) {
+  constructor({ name, size, width, height, url, spoiler }) {
     this.name = name;
     this.size = size;
     this.width = width;
     this.height = height;
+    this.url = url;
+    this.spoiler = spoiler;
   }
 
   /** @type {String} */
@@ -26,8 +28,11 @@ class File {
   /** @type {Number} */
   height;
 
-  /** @type {String} */
+  /** @type {Boolean} */
   spoiler;
+
+  /** @type {String} */
+  url;
 }
 
 module.exports = { File };

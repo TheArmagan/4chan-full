@@ -1,7 +1,11 @@
 const boards = require("../other/boards");
 
-function findBoardCode(input = "") {
-  boards.find(i => {
+/**
+ * @param {String} input 
+ * @returns {{worksafe: Boolean, name: String, code: String}}
+ */
+function findBoard(input = "") {
+  return boards.find(i => {
     const lowerName = i.name.toLowerCase();
     const lowerInput = input.toLowerCase();
     return (
@@ -13,4 +17,4 @@ function findBoardCode(input = "") {
   })
 }
 
-module.exports = { findBoardCode };
+module.exports = { findBoard };
