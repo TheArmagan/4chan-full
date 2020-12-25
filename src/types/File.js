@@ -1,0 +1,21 @@
+class File {
+  /** @type {String} */
+  name;
+
+  /** 
+   * File size in kilobytes
+   * @type {Number} 
+   */
+  size;
+
+  /** @type {Number} */
+  width;
+
+  /** @type {Number} */
+  height;
+
+  /** @type {String} */
+  spoiler;
+}
+
+module.exports = { File };
