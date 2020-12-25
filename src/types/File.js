@@ -1,4 +1,16 @@
 class File {
+
+  /**
+   * 
+   * @param {{name: String, size: Number, width: Number, height: Number}} param0
+   */
+  constructor({ name, size, width, height }) {
+    this.name = name;
+    this.size = size;
+    this.width = width;
+    this.height = height;
+  }
+
   /** @type {String} */
   name;
 

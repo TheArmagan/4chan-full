@@ -1,6 +1,18 @@
 const { File } = require("./File");
 
-export class Reply {
+class Reply {
+
+  /**
+ * 
+ * @param {{id: String, message: String, date: Date, file: File}} param0
+ */
+  constructor({ id, message, date, file }) {
+    this.id = id;
+    this.message = message;
+    this.date = date;
+    this.file = file;
+  }
+
   /** @type {String} */
   id;
 
@@ -13,3 +25,5 @@ export class Reply {
   /** @type {File} */
   file;
 }
+
+module.exports = { Reply };
