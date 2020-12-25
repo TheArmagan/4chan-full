@@ -4,6 +4,7 @@ const { defaultRequest } = require("../utils/defaultRequest");
 const { findBoard } = require("../utils/findBoard");
 const { Board } = require("../types/Board");
 const { Thread } = require("../types/Thread");
+const { parseFile } = require("./file");
 
 const { File } = require("../types/File");
 
@@ -55,14 +56,7 @@ function parseBoard(rawHTML = "", href = "") {
     _thread.full = false;
     _thread.id = t.id.slice(1);
 
-    if (t.querySelector(".opContainer .fileText")) {
-      let f = t.querySelector(".opContainer .fileText");
-      let _file = new File();
-
-      _file.name = f.querySelector("a").hasAttribute("title") ? f.querySelector("a").title : f.querySelector("a").textContent;
-
-
-    }
+    _thread.file = parseFile(t.querySelector(".opContainer .file"));
   })
 
   return _board;
