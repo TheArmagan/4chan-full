@@ -57,6 +57,8 @@ class FourChanFull {
   async archive(boardCode) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
+
+
   }
 
   async thread(boardCode, threadId) {

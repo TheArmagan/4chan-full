@@ -4,6 +4,16 @@ class SafetyType {
   static NON_WORKSAFE = "nws";
 
   static COMBINED = "all";
+
 }
 
-module.exports = { SafetyType }
+class SafetyTypeReverse {
+  static ws = "WORKSAFE";
+
+  static nws = "NON_WORKSAFE";
+
+  static all = "COMBINED";
+
+}
+
+module.exports = { SafetyType, SafetyTypeReverse }
