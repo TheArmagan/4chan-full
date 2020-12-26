@@ -2,6 +2,7 @@ let { FourChanFull } = require("./src/FourChanFull");
 
 let FCHF = new FourChanFull();
 
-FCHF.board("wg").then(board => {
-    console.log(board)
+
+FCHF.thread("wg", "6872254").then(thread => {
+    console.log(thread);
 })

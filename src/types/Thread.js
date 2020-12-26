@@ -7,7 +7,7 @@ class Thread {
   id;
 
   /** @type {String} */
-  href;
+  url;
 
   /** @type {String} */
   subject;

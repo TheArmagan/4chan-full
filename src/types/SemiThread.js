@@ -21,6 +21,9 @@ class SemiThread {
   /** @type {File?} */
   file;
 
+  /** @type {String} */
+  url;
+
 }
 
 module.exports = { SemiThread };

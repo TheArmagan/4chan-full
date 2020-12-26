@@ -22,7 +22,7 @@ class Board {
   banner;
 
   /** @type {String} */
-  href;
+  url;
 }
 
 module.exports = { Board };
