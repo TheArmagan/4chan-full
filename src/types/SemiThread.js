@@ -1,13 +1,10 @@
 const { Reply } = require("./Reply");
 const { File } = require("./File");
 
-class Thread {
+class SemiThread {
 
   /** @type {String} */
   id;
-
-  /** @type {String} */
-  href;
 
   /** @type {String} */
   subject;
@@ -24,8 +21,6 @@ class Thread {
   /** @type {File?} */
   file;
 
-  /** @type {Boolean} */
-  archived;
 }
 
-module.exports = { Thread };
+module.exports = { SemiThread };
