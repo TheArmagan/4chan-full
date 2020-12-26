@@ -54,6 +54,11 @@ class FourChanFull {
     return _board;
   }
 
+  async archive(boardCode) {
+    const board = findBoard(boardCode);
+    if (!board) throw "Invalid board.";
+  }
+
   async thread(boardCode, threadId) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
@@ -89,9 +94,6 @@ class FourChanFull {
     return parseStats(document.querySelector("#site-stats"));
   }
 
-  async archive() {
-
-  }
 }
 
 module.exports = { FourChanFull };

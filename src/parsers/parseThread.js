@@ -23,6 +23,10 @@ function parseThread(e, board) {
   _thread.subject = e.querySelector(".opContainer .postInfo.desktop .subject").textContent;
   _thread.message = e.querySelector(".opContainer .postMessage").textContent;
 
+  _thread.boardCode = board.code;
+  _thread.boardName = board.name;
+  _thread.worksafe = board.worksafe
+
   _thread.replies = Array.from(e.querySelectorAll(".postContainer.replyContainer")).map((replyElement) => {
     return parseReply(replyElement);
   });
