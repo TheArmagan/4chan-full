@@ -4,6 +4,6 @@ let { FourChanFull, FCHF, boards } = require("./index");
 //   console.log(boards)
 // })
 
-FCHF.popular().then(boards => {
+FCHF.archive("wg").then(boards => {
   console.log(boards)
 })

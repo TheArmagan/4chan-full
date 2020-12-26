@@ -6,12 +6,14 @@ const { parseArchiveItem } = require("./parseArchiveItem");
  *
  * @returns {Archive}
  */
-function parseArchive(e, board) {
+function parseArchive(e, { board, href }) {
   const _archive = new Archive();
 
   _archive.boardCode = board.code;
   _archive.boardName = board.name;
   _archive.worksafe = board.worksafe;
+
+  _archive.url = href;
 
   _archive.items = Array.from(e.querySelectorAll("#arc-list tbody tr")).map(trElement => {
     return parseArchiveItem(trElement);

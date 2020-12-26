@@ -8,6 +8,7 @@ const { parseBoard } = require("./parsers/parseBoard.js");
 const { SafetyType } = require("./other/SafetyType");
 const boards = require("./other/boards");
 const { PopularThread } = require("./types/PopularThread");
+const { parseArchive } = require("./parsers/parseArchive.js");
 
 
 
@@ -38,7 +39,11 @@ class FourChanFull {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
 
+    const href = `https://boards.4chan.org/${board.code}/archive`;
+    const document = new JSDOM(await this.#request("GET", href), { url: href })
+      .window.document;
 
+    return parseArchive(document, { board, href });
   }
 
   async thread(boardCode, threadId) {

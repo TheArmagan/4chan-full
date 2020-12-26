@@ -10,6 +10,9 @@ class Archive {
   /** @type {String} Based on board name. (Not fully correct*) */
   worksafe;
 
+  /** @type {String} */
+  url;
+
   /** @type {Array<ArchiveItem>} */
   items;
 }
