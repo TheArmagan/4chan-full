@@ -9,7 +9,7 @@ function findBoard(input = "") {
     const lowerName = i.name.toLowerCase();
     const lowerInput = input.toLowerCase();
     return (
-      i.code == input ||
+      i.code == lowerInput ||
       lowerName.replace(/[^a-zA-Z0-9]+/gm, "") == lowerInput.replace(/[^a-zA-Z0-9]+/gm, "")
     );
   });

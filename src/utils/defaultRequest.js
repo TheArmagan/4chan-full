@@ -8,7 +8,8 @@ const got = require("got").default;
  * @returns {Promise<String>}
  */
 async function defaultRequest(method, url, headers) {
-  let response = await got(url, { method, headers, responseType: "text" });
+  console.log(url)
+  let response = await got(url, { method, headers, responseType: "text", throwHttpErrors: false });
   return response.body;
 }
 

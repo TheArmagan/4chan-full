@@ -3,11 +3,10 @@ const { parseSemiThread } = require("./parseThread.js");
 
 /**
  * @param {HTMLElement} e
- * @param {{worksafe: Boolean, name: String, code: String}} board
  * 
  * @returns {Board}
  */
-function parseBoard(e, board) {
+function parseBoard(e, { board, pageNumber, href }) {
   const _board = new Board();
 
   _board.banner = `https://s.4cdn.org/image/title/${e.querySelector("#bannerCnt").getAttribute("data-src")}`;

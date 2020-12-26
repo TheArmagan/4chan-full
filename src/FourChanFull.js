@@ -1,18 +1,14 @@
 const { JSDOM } = require("jsdom");
-
 const { defaultRequest } = require("./utils/defaultRequest.js");
 const { findBoard } = require("./utils/findBoard.js");
-
 const { parseStats } = require("./parsers/parseStats");
 const { parseThread } = require("./parsers/parseThread.js");
-const { parsePopularThread } = require("./parsers/parsePopularThread");
+const { parsePopularThreads } = require("./parsers/parsePopularThreads.js");
 const { parseBoard } = require("./parsers/parseBoard.js");
-
 const { SafetyType } = require("./other/SafetyType");
 const boards = require("./other/boards");
-
-const { Board } = require("./types/Board");
 const { PopularThread } = require("./types/PopularThread");
+
 
 
 class FourChanFull {
@@ -32,10 +28,10 @@ class FourChanFull {
   async board(boardCode, pageNumber = 1) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
-    const href = `https://boards.4chan.org/${boardCode}/${pageNumber == 1 ? "" : pageNumber}`;
+    const href = `https://boards.4chan.org/${board.code}/${pageNumber == 1 ? "" : pageNumber}`;
     const document = new JSDOM(await this.#request("GET", href), { url: href }).window.document;
 
-    return parseBoard(document, board);
+    return parseBoard(document, { board, pageNumber, href });
   }
 
   async archive(boardCode) {
@@ -48,7 +44,7 @@ class FourChanFull {
   async thread(boardCode, threadId) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
-    const href = `https://boards.4chan.org/${boardCode}/thread/${threadId}`;
+    const href = `https://boards.4chan.org/${board.code}/thread/${threadId}`;
     const document = new JSDOM(await this.#request("GET", href), { url: href })
       .window.document;
     return parseThread(document, board);
@@ -58,7 +54,7 @@ class FourChanFull {
    * @param {"WORKSAFE"|"NON_WORKSAFE"|"COMBINED"} safety
    * @returns {Promise<Array<PopularThread>>}
   */
-  async popular(safety) {
+  async popular(safety = "COMBINED") {
     safety = SafetyType[safety];
     if (!safety) throw "Invalid safety type!";
 
@@ -67,9 +63,7 @@ class FourChanFull {
       { url: "https://www.4chan.org/" }
     ).window.document;
 
-    return Array.from(document.querySelectorAll(".c-thread")).map(popularThreadElm => {
-      return parsePopularThread(popularThreadElm)
-    })
+    return parsePopularThreads(document.querySelector("#popular-threads"), safety);
   }
 
   async stats() {
