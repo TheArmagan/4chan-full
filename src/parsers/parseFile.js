@@ -34,7 +34,7 @@ function parseFile(e) {
 }
 
 /** 
- * @returns {number} 
+ * @returns {number} Eg. 1.23 GB or 12 kb
  */
 function parseFileSize(fileSizeText = "0 GB") {
   let splitted = fileSizeText.split(" ");
@@ -57,4 +57,4 @@ function parseFileSize(fileSizeText = "0 GB") {
   return sizeInKB;
 }
 
-module.exports = { parseFile };
+module.exports = { parseFile, parseFileSize };

@@ -2,4 +2,6 @@ let { FourChanFull } = require("./src/FourChanFull");
 
 let FCHF = new FourChanFull();
 
-FCHF.board()
+FCHF.board("wg").then(board => {
+    console.log(board)
+})
