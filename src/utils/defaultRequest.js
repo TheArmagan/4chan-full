@@ -1,10 +1,10 @@
 const got = require("got").default;
 
 /**
- * @param {"GET"|"POST"} method 
- * @param {String} url 
+ * @param {"GET"|"POST"} method
+ * @param {String} url
  * @param {Object} headers
- * 
+ *
  * @returns {Promise<String>}
  */
 async function defaultRequest(method, url, headers) {

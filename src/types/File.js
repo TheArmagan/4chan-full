@@ -1,11 +1,10 @@
 class File {
-
   /** @type {String} */
   name;
 
-  /** 
+  /**
    * File size in kilobytes
-   * @type {Number} 
+   * @type {Number}
    */
   size;
 

@@ -2,7 +2,6 @@ const { Reply } = require("./Reply");
 const { File } = require("./File");
 
 class SemiThread {
-
   /** @type {String} */
   id;
 
@@ -23,7 +22,6 @@ class SemiThread {
 
   /** @type {String} */
   url;
-
 }
 
 module.exports = { SemiThread };

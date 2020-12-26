@@ -2,7 +2,6 @@ const { Reply } = require("./Reply");
 const { File } = require("./File");
 
 class Thread {
-
   /** @type {String} */
   id;
 

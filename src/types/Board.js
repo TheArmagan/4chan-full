@@ -1,8 +1,6 @@
 const { Thread } = require("./Thread");
 
 class Board {
-
-
   /** @type {String} */
   name;
 

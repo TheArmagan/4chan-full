@@ -72,6 +72,7 @@ const boards = [
   { worksafe: false, name: "High Resolution", code: "hr" },
   { worksafe: false, name: "Adult GIF", code: "gif" },
   { worksafe: false, name: "Adult Cartoons", code: "aco" },
-  { worksafe: false, name: "Adult Requests", code: "r" }
+  { worksafe: false, name: "Adult Requests", code: "r" },
+  { worksafe: false, name: "Off-topic", code: "trash" }
 ];
 module.exports = boards;

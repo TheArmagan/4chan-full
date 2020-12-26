@@ -26,7 +26,6 @@ function parseFile(e) {
   const sizeRegexMatch = e.querySelector(".fileText").textContent.match(sizeRegex);
 
   _file.size = parseFileSize(sizeRegexMatch[1]);
-
   _file.width = parseInt(sizeRegexMatch[2]);
   _file.height = parseInt(sizeRegexMatch[3]);
 

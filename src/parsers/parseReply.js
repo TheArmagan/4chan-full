@@ -16,7 +16,6 @@ function parseReply(e) {
   _reply.message = e.querySelector(".postMessage").textContent;
 
   return _reply;
-
 }
 
 module.exports = { parseReply };

@@ -1,7 +1,6 @@
 const { File } = require("./File");
 
 class Reply {
-
   /** @type {String} */
   id;
 

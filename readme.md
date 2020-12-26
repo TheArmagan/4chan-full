@@ -21,50 +21,10 @@ npm install 4chan-full
 - [Get Stats](https://example.com/ "Example Result") (`.getStats()`)
 - [Board List](https://example.com/ "Example Result") (`.boards`);
 
----
+## HUGE Update 1.1.0
 
-### Example `Basic Thread Files Downloader Example`
-
-```js
-// To be honest there is no good examples to use. :D
-let FCHF = require("4chan-full");
-let download = require("download");
-
-// URL Prefix -------------------+--> https://github.com/Armagann/data-pipe
-// Thread Code -------+          |
-// Board Code --+     |          |
-//              |     |          |
-FCHF.getThread("w", "2148861", "https://kao-datapipe-2.herokuapp.com/").then(
-  (thread) => {
-    console.log("subject", thread.subject);
-    console.log("isArchived", thread.isArchived);
-    thread.posts.forEach((post, index) => {
-      console.log(index, "", post.message);
-      if (post.file.exists) {
-        console.log(
-          post.file.url,
-          post.file.name,
-          // Size in KB
-          post.file.size.size,
-          post.file.size.width,
-          post.file.size.height
-        );
-        setTimeout(() => {
-          download(
-            "https://kao-datapipe-1.herokuapp.com/" + post.file.url,
-            "wallpapers",
-            {
-              filename: post.file.name,
-            }
-          );
-        }, index * (Math.random() * 1000) + 1);
-      }
-    });
-  }
-);
-```
-
----
+- Full Rewrite API
+- Update README MD
 
 ### Update 1.0.8
 
