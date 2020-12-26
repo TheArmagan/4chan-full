@@ -16,7 +16,7 @@ function parseStats(e) {
 
   _stats.currentUsers = parseInt(statCellTexts[1].slice(15).replace(/,/gm, ""));
 
-  _stats.activeContent = parseInt(statCellTexts[2].slice(16).replace(/,/gm, ""));
+  _stats.activeContent = parseFileSize(statCellTexts[2].slice(16).replace(/,/gm, ""));
 
   return _stats;
 }

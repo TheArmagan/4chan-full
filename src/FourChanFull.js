@@ -7,8 +7,7 @@ const { parseStats } = require("./parsers/parseStats");
 const { parseSemiThread, parseThread } = require("./parsers/parseThread.js");
 
 const { Board } = require("./types/Board");
-const { Thread } = require("./types/Thread");
-const { SemiThread } = require("./types/SemiThread");
+
 
 class FourChanFull {
   #request = defaultRequest;
