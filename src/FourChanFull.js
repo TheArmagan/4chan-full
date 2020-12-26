@@ -5,6 +5,7 @@ const { findBoard } = require("./utils/findBoard.js");
 
 const { parseFile } = require("./parsers/parseFile.js");
 const { parseReply } = require("./parsers/parseReply.js");
+const { parseSemiThread } = require("./parsers/parseThread.js");
 
 const { Board } = require("./types/Board");
 const { Thread } = require("./types/Thread");
@@ -39,22 +40,7 @@ class FourChanFull {
     _board.href = href;
 
     _board.threads = Array.from(document.querySelectorAll(".thread")).map((threadElm) => {
-      const _semiThread = new SemiThread();
-
-      console.log(threadElm.childElementCount)
-
-      _semiThread.id = threadElm.id.replace(/[^0-9]/gm, "");
-      _semiThread.date = new Date(threadElm.querySelector(".opContainer .postInfo.desktop .dateTime").getAttribute("data-utc") * 1000);
-      _semiThread.file = parseFile(threadElm.querySelector(".opContainer .file"));
-
-      _semiThread.subject = threadElm.querySelector(".opContainer .postInfo.desktop .subject").textContent;
-      _semiThread.message = threadElm.querySelector(".opContainer .postMessage").textContent;
-
-      _semiThread.replies = Array.from(threadElm.querySelectorAll(".postContainer.replyContainer")).map((replyElement) => {
-        return parseReply(replyElement);
-      });
-
-      return _semiThread;
+      return parseSemiThread(threadElm);
     })
 
     return _board;
