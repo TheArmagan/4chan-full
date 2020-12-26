@@ -3,8 +3,7 @@ const { JSDOM } = require("jsdom");
 const { defaultRequest } = require("./utils/defaultRequest.js");
 const { findBoard } = require("./utils/findBoard.js");
 
-const { parseFile } = require("./parsers/parseFile.js");
-const { parseReply } = require("./parsers/parseReply.js");
+const { parseStats } = require("./parsers/parseStats");
 const { parseSemiThread, parseThread } = require("./parsers/parseThread.js");
 
 const { Board } = require("./types/Board");
@@ -55,7 +54,8 @@ class FourChanFull {
   }
 
   async stats() {
-    const document = new JSDOM(await this.#request("https://www.4chan.org/"), { url: href }).window.document;
+    const document = new JSDOM(await this.#request("GET", "https://www.4chan.org/")).window.document;
+    return parseStats(document.querySelector("#site-stats"));
   }
 }
 
