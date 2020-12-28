@@ -50,8 +50,7 @@ class FourChanFull {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
     const href = `https://boards.4chan.org/${board.code}/thread/${threadId}`;
-    const document = new JSDOM(await this.#request("GET", href), { url: href })
-      .window.document;
+    const document = new JSDOM(await this.#request("GET", href), { url: href }).window.document;
     return parseThread(document, board);
   }
 
