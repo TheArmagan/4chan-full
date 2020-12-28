@@ -46,7 +46,7 @@
     "readonly",
     "4chan-full"
   ],
-  "license": "Apache-2.0",
+  "license": "GNU GPLv3",
   "main": "index.js",
   "name": "4chan-full",
   "repository": {

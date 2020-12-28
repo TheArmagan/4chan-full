@@ -1,9 +1,22 @@
+const { BoardInfo } = require("./BoardInfo");
+const { FourChanFull } = require("../FourChanFull");
+
 class ArchiveItem {
-  /** @type {String} */
-  threadId;
+  constructor(fchf) {
+    this.fchf = fchf;
+  }
+
+  /** @type {FourChanFull} */
+  fchf;
+
+  /** @type {BoardInfo} */
+  boardInfo;
 
   /** @type {String} */
-  excerpt
+  id;
+
+  /** @type {String} */
+  excerpt;
 }
 
 module.exports = { ArchiveItem };

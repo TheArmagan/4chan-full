@@ -8,7 +8,7 @@ const { ArchiveItem } = require("../types/ArchiveItem");
 function parseArchiveItem(e) {
   const _archiveItem = new ArchiveItem();
 
-  _archiveItem.threadId = e.cells[0].textContent;
+  _archiveItem.id = e.cells[0].textContent;
   _archiveItem.excerpt = e.cells[1].textContent;
 
   return _archiveItem;
