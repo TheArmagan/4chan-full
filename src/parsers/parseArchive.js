@@ -9,9 +9,7 @@ const { parseArchiveItem } = require("./parseArchiveItem");
 function parseArchive(e, { board, href }) {
   const _archive = new Archive();
 
-  _archive.boardCode = board.code;
-  _archive.boardName = board.name;
-  _archive.worksafe = board.worksafe;
+  _archive.boardInfo = board;
 
   _archive.url = href;
 

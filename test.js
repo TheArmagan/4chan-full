@@ -1,9 +1,5 @@
-let { FourChanFull, FCHF, boards } = require("./index");
+let {fchf} = require("./index");
 
-// FCHF.board("wg").then(boards => {
-//   console.log(boards)
-// })
-
-FCHF.archive("wg").then(boards => {
-  console.log(boards)
-})
+(async () => {
+  console.log(await fchf.board("wg"))
+})();

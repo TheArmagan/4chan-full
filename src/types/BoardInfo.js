@@ -1,12 +1,4 @@
-const {FourChanFull} = require("../FourChanFull");
-
 class BoardInfo {
-  constructor(fchf) {
-    this.fchf = fchf;
-  }
-
-  /** @type {FourChanFull} */
-  fchf;
 
   /** @type {String} */
   name;
@@ -17,9 +9,6 @@ class BoardInfo {
   /** @type {Boolean} */
   worksafe;
 
-  board(pageNumber=1) {
-    return this.fchf.board(this.code, pageNumber);
-  }
 }
 
-module.exports = {BoardInfo}
+module.exports = { BoardInfo };
