@@ -1,15 +1,25 @@
+const { PopularThreads } = require("./PopularThreads");
+const { BoardInfo } = require("./BoardInfo");
+const { FourChanFull } = require("../FourChanFull");
+
+
 class PopularThread {
-  /** @type {String} */
-  boardCode;
+
+  constructor(fchf) {
+    this.fchf = fchf;
+  }
+
+  /** @type {FourChanFull} */
+  fchf;
+
+  /** @type {BoardInfo} */
+  boardInfo;
+
+  /** @type {PopularThreads} */
+  parent;
 
   /** @type {String} */
-  boardName;
-
-  /** @type {String} Based on board name. (Not fully correct*) */
-  worksafe;
-
-  /** @type {String} */
-  threadId;
+  id;
 
   /** @type {String} */
   teaser;
@@ -19,6 +29,10 @@ class PopularThread {
 
   /** @type {String} */
   url;
+
+  thread() {
+    this.fchf.thread(this.boardInfo.code, this.id);
+  }
 }
 
 module.exports = { PopularThread };
