@@ -4,6 +4,7 @@ const { findBoard } = require("../utils/findBoard");
 
 const { Thread } = require("../types/Thread");
 const { SemiThread } = require("../types/SemiThread");
+const { parseMessageContent } = require("./parseMessageContent");
 
 /**
  * @param {HTMLElement} e Full thread page
@@ -21,7 +22,7 @@ function parseThread(e, board) {
   _thread.url = `https://boards.4chan.org/${board.code}/thread/${_thread.id}`;
 
   _thread.subject = e.querySelector(".opContainer .postInfo.desktop .subject").textContent;
-  _thread.message = e.querySelector(".opContainer .postMessage").textContent;
+  _thread.message = parseMessageContent(e.querySelector(".opContainer .postMessage"));
 
   _thread.boardInfo = board;
 
@@ -46,7 +47,7 @@ function parseSemiThread(e, board) {
   _semiThread.url = `https://boards.4chan.org/${board.code}/thread/${_semiThread.id}`;
 
   _semiThread.subject = e.querySelector(".opContainer .postInfo.desktop .subject").textContent;
-  _semiThread.message = e.querySelector(".opContainer .postMessage").textContent;
+  _semiThread.message = parseMessageContent(e.querySelector(".opContainer .postMessage"));
 
   _semiThread.replies = Array.from(e.querySelectorAll(".postContainer.replyContainer")).map((replyElement) => {
     return parseReply(replyElement);

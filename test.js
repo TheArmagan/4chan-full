@@ -1,7 +1,6 @@
-let {fchf} = require("./index");
+let { fchf } = require("./index");
 
 (async () => {
-  const thread = await fchf.thread("wg", "7694540");
-  const files = [thread.file, ...thread.replies.map(i => i?.file)].filter(i => i != null);
-  console.log(files);
+  const thread = await fchf.thread("gd", "401824");
+  console.log(require("util").inspect(thread, false, 16, true));
 })();

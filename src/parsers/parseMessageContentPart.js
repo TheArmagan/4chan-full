@@ -1,36 +1,33 @@
 const { MessageContentPart } = require("../types/MessageContentPart");
 
 /**
- * @param {HTMLElement} node example node postMessage.childNodes[0]
+ * @param {HTMLElement} e example node postMessage.childNodes[0]
  *
  * @returns {MessageContentPart}
  */
-function parseMessageContentPart(node) {
+function parseMessageContentPart(e) {
 
-  switch (node.nodeName) {
-    case "#text":
-      return new MessageContentPart({
-        name: node.nodeName,
-        type: "plaintext"
-      });
-    case "BR":
-      return new MessageContentPart({
-        text: "\n",
-        type: "linebreak"
-      });
-    case "SPAN":
-      return new MessageContentPart({
-        text: node.innerText,
-        type: "quote"
-      });
-    case "A":
-      return new MessageContentPart({
-        text: node.innerText,
-        type: "quotelink",
-        url: node.href
-      });
+  const _messageContentPart = new MessageContentPart();
+
+  if (e.nodeName == "#text") {
+    _messageContentPart.text = e.wholeText;
+    _messageContentPart.type = "plaintext";
+  } else if (e.nodeName == "A" && e.classList.contains("quotelink")) {
+    _messageContentPart.text = e.textContent;
+    _messageContentPart.type = "quotelink";
+    _messageContentPart.url = e.href;
+  } else if (e.nodeName == "SPAN" && e.classList.contains("quote")) {
+    _messageContentPart.text = e.textContent;
+    _messageContentPart.type = "quote";
+  } else if (e.nodeName == "BR") {
+    _messageContentPart.text = "\n";
+    _messageContentPart.type = "linebreak";
+  } else {
+    _messageContentPart.text = e.textContent;
+    _messageContentPart.type = "other";
   }
 
+  return _messageContentPart;
 }
 
 module.exports = { parseMessageContentPart };
