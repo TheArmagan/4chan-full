@@ -6,6 +6,10 @@ class MessageContent {
 
   /** @type {Array<MessageContentPart>} */
   parts;
+
+  toString() {
+    return this.text;
+  }
 }
 
 module.exports = { MessageContent };
