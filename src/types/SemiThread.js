@@ -1,5 +1,6 @@
 const { Reply } = require("./Reply");
 const { File } = require("./File");
+const { MessageContent } = require("./MessageContent");
 
 class SemiThread {
   /** @type {String} */
@@ -8,7 +9,7 @@ class SemiThread {
   /** @type {String} */
   subject;
 
-  /** @type {String} */
+  /** @type {MessageContent} */
   message;
 
   /** @type {Date} */

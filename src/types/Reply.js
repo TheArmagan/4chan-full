@@ -1,10 +1,11 @@
 const { File } = require("./File");
+const { MessageContent } = require("./MessageContent");
 
 class Reply {
   /** @type {String} */
   id;
 
-  /** @type {String} */
+  /** @type {MessageContent} */
   message;
 
   /** @type {Date} */

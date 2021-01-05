@@ -1,6 +1,7 @@
 const { Reply } = require("./Reply");
 const { File } = require("./File");
 const { BoardInfo } = require("./BoardInfo");
+const { MessageContent } = require("./MessageContent");
 
 class Thread {
 
@@ -16,7 +17,7 @@ class Thread {
   /** @type {String} */
   subject;
 
-  /** @type {String} */
+  /** @type {MessageContent} */
   message;
 
   /** @type {Date} */
