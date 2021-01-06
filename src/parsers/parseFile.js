@@ -15,13 +15,24 @@ function parseFile(e) {
   const isSpoiler = Boolean(e.querySelector(".imgspoiler"));
 
   _file.spoiler = isSpoiler;
-  _file.name = isSpoiler
-    ? e.querySelector(".fileText").getAttribute("title")
-    : e.querySelector(".fileText a").hasAttribute("title")
-      ? e.querySelector(".fileText a").getAttribute("title")
-      : e.querySelector(".fileText a").textContent;
+  // _file.name = isSpoiler
+  //   ? e.querySelector(".fileText").getAttribute("title")
+  //   : e.querySelector(".fileText a").hasAttribute("title")
+  //     ? e.querySelector(".fileText a").getAttribute("title")
+  //     : e.querySelector(".fileText a").textContent;
 
-  _file.url = e.querySelector(".fileText a").href;
+  const fileText = e.querySelector(".fileText");
+  const fileTextA = e.querySelector(".fileText a");
+
+  if (isSpoiler) {
+    _file.name = fileText.getAttribute("title");
+  } else if (fileTextA.hasAttribute("title")) {
+    _file.name = fileTextA.getAttribute("title");
+  } else {
+    _file.name = fileTextA.textContent;
+  }
+
+  _file.url = fileTextA.href;
 
   const sizeRegexMatch = e.querySelector(".fileText").textContent.match(sizeRegex);
 
