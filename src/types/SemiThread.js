@@ -1,6 +1,7 @@
 const { Reply } = require("./Reply");
 const { File } = require("./File");
 const { MessageContent } = require("./MessageContent");
+const { Country } = require("./Country");
 
 class SemiThread {
   /** @type {String} */
@@ -23,6 +24,9 @@ class SemiThread {
 
   /** @type {String} */
   url;
+
+  /** @type {Country?} */
+  country;
 }
 
 module.exports = { SemiThread };

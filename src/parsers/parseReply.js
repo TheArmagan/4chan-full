@@ -1,6 +1,7 @@
 const { parseFile } = require("./parseFile");
 const { Reply } = require("../types/Reply");
 const { parseMessageContent } = require("./parseMessageContent");
+const { parseCountry } = require("./parseCountry");
 
 /**
  * @param {HTMLElement} e
@@ -15,6 +16,7 @@ function parseReply(e) {
 
   _reply.file = parseFile(e.querySelector(".file"));
   _reply.message = parseMessageContent(e.querySelector(".postMessage"));
+  _reply.country = parseCountry(e.querySelector(".postInfo.desktop .flag"));
 
   return _reply;
 }

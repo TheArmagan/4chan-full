@@ -1,19 +1,19 @@
 const { JSDOM } = require("jsdom");
-const { defaultRequest } = require("./utils/defaultRequest.js");
-const { findBoard } = require("./utils/findBoard.js");
+const { defaultRequest } = require("./utils/defaultRequest");
+const { findBoard } = require("./utils/findBoard");
 const { parseStats } = require("./parsers/parseStats");
-const { parseThread } = require("./parsers/parseThread.js");
-const { parsePopularThreads } = require("./parsers/parsePopularThreads.js");
-const { parseBoard } = require("./parsers/parseBoard.js");
+const { parseThread } = require("./parsers/parseThread");
+const { parsePopularThreads } = require("./parsers/parsePopularThreads");
+const { parseBoard } = require("./parsers/parseBoard");
 const { SafetyType } = require("./other/SafetyType");
 const boards = require("./other/boards");
-const { PopularThread } = require("./types/PopularThread");
-const { parseArchive } = require("./parsers/parseArchive.js");
+const { parseArchive } = require("./parsers/parseArchive");
+const { ThreadWatcher } = require("./watchers/ThreadWatcher");
 
 
 
 class FourChanFull {
-  #request = defaultRequest;
+  _request = defaultRequest;
 
   static boards = boards;
 
@@ -22,48 +22,67 @@ class FourChanFull {
    */
   constructor(request) {
     if (typeof request == "function") {
-      this.#request = request;
+      this._request = request;
     }
   }
 
+  /**
+   * @param {String} boardCode 
+   * @param {String} threadId 
+   */
+  createThreadWatcher(boardCode, threadId) {
+    let watcher = new ThreadWatcher(this, boardCode, threadId);
+    return watcher;
+  }
+
+/**
+* @param {String} boardCode
+* @param {Number} pageNumber (1-10)
+*/
   async board(boardCode, pageNumber = 1) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
     const href = `https://boards.4chan.org/${board.code}/${pageNumber == 1 ? "" : pageNumber}`;
-    const document = new JSDOM(await this.#request("GET", href), { url: href }).window.document;
+    const document = new JSDOM(await this._request("GET", href), { url: href }).window.document;
 
     return parseBoard(document, { board, pageNumber, href });
   }
 
+/**
+* @param {String} boardCode
+*/
   async archive(boardCode) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
 
     const href = `https://boards.4chan.org/${board.code}/archive`;
-    const document = new JSDOM(await this.#request("GET", href), { url: href })
+    const document = new JSDOM(await this._request("GET", href), { url: href })
       .window.document;
 
     return parseArchive(document, { board, href });
   }
-
+  
+/**
+* @param {String} boardCode
+* @param {String} threadId
+*/
   async thread(boardCode, threadId) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";
     const href = `https://boards.4chan.org/${board.code}/thread/${threadId}`;
-    const document = new JSDOM(await this.#request("GET", href), { url: href }).window.document;
+    const document = new JSDOM(await this._request("GET", href), { url: href }).window.document;
     return parseThread(document, board);
   }
 
   /** 
    * @param {"WORKSAFE"|"NON_WORKSAFE"|"COMBINED"} safety
-   * @returns {Promise<Array<PopularThread>>}
   */
   async popular(safety = "COMBINED") {
     safety = SafetyType[safety];
     if (!safety) throw "Invalid safety type!";
 
     const document = new JSDOM(
-      await this.#request("GET", "https://www.4chan.org/", { cookie: `fpc=${safety}` }),
+      await this._request("GET", "https://www.4chan.org/", { cookie: `fpc=${safety}` }),
       { url: "https://www.4chan.org/" }
     ).window.document;
 
@@ -72,7 +91,7 @@ class FourChanFull {
 
   async stats() {
     const document = new JSDOM(
-      await this.#request("GET", "https://www.4chan.org/"),
+      await this._request("GET", "https://www.4chan.org/"),
       { url: "https://www.4chan.org/" }
     ).window.document;
     return parseStats(document.querySelector("#site-stats"));

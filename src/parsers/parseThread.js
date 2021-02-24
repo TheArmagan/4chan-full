@@ -5,6 +5,7 @@ const { findBoard } = require("../utils/findBoard");
 const { Thread } = require("../types/Thread");
 const { SemiThread } = require("../types/SemiThread");
 const { parseMessageContent } = require("./parseMessageContent");
+const { parseCountry } = require("./parseCountry");
 
 /**
  * @param {HTMLElement} e Full thread page
@@ -30,6 +31,8 @@ function parseThread(e, board) {
     return parseReply(replyElement);
   });
 
+  _thread.country = parseCountry(e.querySelector(".opContainer .postInfo.desktop .flag"));
+
   return _thread;
 }
 
@@ -52,6 +55,8 @@ function parseSemiThread(e, board) {
   _semiThread.replies = Array.from(e.querySelectorAll(".postContainer.replyContainer")).map((replyElement) => {
     return parseReply(replyElement);
   });
+
+  _semiThread.country = parseCountry(e.querySelector(".opContainer .postInfo.desktop .flag"));
 
   return _semiThread;
 

@@ -2,6 +2,7 @@ const { Reply } = require("./Reply");
 const { File } = require("./File");
 const { BoardInfo } = require("./BoardInfo");
 const { MessageContent } = require("./MessageContent");
+const { Country } = require("./Country");
 
 class Thread {
 
@@ -31,6 +32,9 @@ class Thread {
 
   /** @type {Boolean} */
   archived;
+
+  /** @type {Country?} */
+  country;
 }
 
 module.exports = { Thread };

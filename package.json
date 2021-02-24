@@ -41,10 +41,10 @@
   "keywords": [
     "4chan",
     "api",
-    "datapipe",
     "full",
     "readonly",
-    "4chan-full"
+    "4chan-full",
+    "easy"
   ],
   "license": "GNU GPLv3",
   "main": "index.js",
@@ -56,5 +56,5 @@
   "scripts": {
     "test": "node test.js"
   },
-  "version": "1.1.1"
+  "version": "1.2.0"
 }
