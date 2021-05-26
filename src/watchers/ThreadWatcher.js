@@ -1,126 +1,120 @@
 const { FourChanFull } = require("../FourChanFull");
-const { Thread } = require("../types/Thread");
-const { Reply } = require("../types/Reply");
 const { EventEmitter } = require("events");
+const sleep = require("stuffs/lib/sleep");
+const { Thread } = require("../types/Thread");
+const { resolve } = require("path");
+
 
 class ThreadWatcher {
 
   /** @type {FourChanFull} */
   fchf;
 
-  /** @type {EventEmitter} */
-  events = new EventEmitter();
+  #options = {
+    boardCode: "",
+    threadId: "",
+    checkIntervalMin: 0,
+    checkIntervalMax: 0,
+    checkIntervalAdder: 0
+  }
 
-  #timeoutMultiplier = 1;
+  get options() {
+    return this.#options;
+  }
 
-  #checkTimeout;
+  #checkInterval = 0;
 
-  #timeoutId = 0;
+  get checkInterval() {
+    return this.#checkInterval;
+  }
 
   #running = false;
 
-  /** @type {String} */
-  #boardCode;
-
-  /** @type {String} */
-  #threadId;
-
-  /** @type {Number} */
-  timeout;
-
-  /** @type {Number} */
-  defaultCheckTimeout;
-
-  /** @type {Number} */
-  lastCheckAt = 0;
-
-  /** @type {Number} */
-  lastReplyAt = 0;
-
-  /** @type {Thread} */
-  thread;
-
-
-  /**
-   * @param {FourChanFull} fchf 
-   * @param {String} boardCode 
-   * @param {String} threadId 
-   * @param {Number} timeout
-   * @param {Number} defaultCheckTimeout
-   */
-  constructor(fchf, boardCode, threadId, timeout, defaultCheckTimeout) {
-    this.fchf = fchf;
-    this.#boardCode = boardCode;
-    this.#threadId = threadId;
-    this.timeout = timeout ?? 60000 * 60;
-    this.defaultCheckTimeout = defaultCheckTimeout ?? 2500;
-    this.#checkTimeout = this.defaultCheckTimeout;
-  }
-
-  get isRunning() {
+  get running() {
     return this.#running;
   }
 
-  start(resetTimes = true) {
-    if (this.#running) throw "Already running.";
-    if (resetTimes) {
-      this.#timeoutMultiplier = 1;
-      this.#checkTimeout = 2500;
-    }
+  /** @type {Thread} */
+  #lastResult = {};
 
-    this.#running = true;
-    this.#check();
-    return true;
+  get lastResult() {
+    return this.#lastResult;
   }
 
-  stop(resetTimes = false) {
-    if (!this.#running) throw "Already not running.";
-    this.#running = false;
-    clearTimeout(this.#timeoutId);
-    this.#timeoutId = null;
+  #startTime = -1;
 
-    if (resetTimes) {
-      this.#timeoutMultiplier = 1;
-      this.#checkTimeout = 2500;
-    }
-    return true;
+  get startTime() {
+    return this.#startTime;
   }
 
-  #check = async () => {
-    let thread = await this.fchf.thread(this.#boardCode, this.#threadId);
-    this.events.emit("thread", thread);
-    /** @type {Array<Reply>} */
-    let newReplies = [];
-    thread.replies.forEach(reply => {
-      let isHere = this?.thread?.replies?.some(i => i.id == reply.id);
-      if (!isHere) {
-        newReplies.push(reply);
+  events = new EventEmitter();
+
+  on(eventName, listener) {
+    this.events.on(eventName, listener);
+  }
+
+  off(eventName, listener) {
+    this.events.off(eventName, listener);
+  }
+
+  /**
+   * @param {FourChanFull} fchf 
+   * @param {{boardCode:string,threadId:string,checkIntervalMin:number,checkIntervalMax:number,checkIntervalAdder:number}} options
+   */
+  constructor(fchf, options) {
+    this.fchf = fchf;
+    this.#options.boardCode = options.boardCode;
+    this.#options.threadId = options.threadId;
+    this.#options.checkIntervalMin = options.checkIntervalMin || 3000;
+    this.#options.checkIntervalMax = options.checkIntervalMax || 60000;
+    this.#options.checkIntervalAdder = options.checkIntervalAdder || this.#options.checkIntervalMin;
+  }
+
+  start() {
+    const self = this;
+    const { boardCode, threadId, checkIntervalAdder, checkIntervalMax, checkIntervalMin, onUpdate } = this.options;
+    return new Promise(async (resolve, reject) => {
+      if (self.#running) return reject(Error("Thread watcher already running!"));
+      self.#startTime = Date.now();
+      self.#running = true;
+      self.#checkInterval = checkIntervalMin;
+      self.events.emit("#start");
+      async function _check() {
+        if (!self.#running) return self.events.emit("#stop");
+        try {
+          let thread = await self.fchf.thread(boardCode, threadId);
+          resolve();
+          if (self.#lastResult?.replies?.length != thread.replies.length) {
+            self.#checkInterval = checkIntervalMin;
+            self.events.emit("updated", self.#lastResult, thread);
+          } else {
+            self.#checkInterval += checkIntervalAdder;
+            if (self.#checkInterval > checkIntervalMax) self.#checkInterval = checkIntervalMax;
+            self.events.emit("notUpdated");
+          }
+          self.events.emit("checked", self.#lastResult, thread);
+          self.#lastResult = thread;
+          await sleep(self.#checkInterval);
+          _check();
+        } catch (err) {
+          self.#running = false;
+          self.events.emit("error", err);
+          reject(err);
+        }
       }
-    });
-    if (newReplies.length != 0) {
-      this.events.emit("replies", newReplies);
-      this.#timeoutMultiplier = 1;
-      this.#checkTimeout = 2500;
-      this.lastReplyAt = Date.now();
-    } else {
-      this.#timeoutMultiplier += 1;
-    }
+      _check();
+    })
+  }
 
-    this.lastCheckAt = Date.now();
-    this.#checkTimeout *= this.#timeoutMultiplier;
-
-    if (Date.now() - this.lastReplyAt > this.timeout) {
-      this.events.emit("timeout");
-      this.stop()
-    } else {
-      this.#timeoutId = setTimeout(() => {
-        this.#check();
-      }, this.#checkTimeout);
-    }
-
+  stop() {
+    return new Promise(async (resolve, reject) => {
+      this.#running = false;
+      this.#startTime = -1;
+      this.events.once("#stop", resolve);
+    })
   }
 }
 
-// TODO: Make tests.
+
 
 module.exports = { ThreadWatcher };

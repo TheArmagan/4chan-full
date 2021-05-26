@@ -13,17 +13,20 @@ function parseFile(e) {
   const _file = new File();
 
   const isSpoiler = Boolean(e.querySelector(".imgspoiler"));
+  
+  const fileText = e.querySelector(".fileText");
+  const fileTextA = e.querySelector(".fileText a");
 
   _file.spoiler = isSpoiler;
   _file.name = isSpoiler
-    ? e.querySelector(".fileText").getAttribute("title")
-    : e.querySelector(".fileText a").hasAttribute("title")
-      ? e.querySelector(".fileText a").getAttribute("title")
-      : e.querySelector(".fileText a").textContent;
+    ? fileText.getAttribute("title")
+    : fileTextA.hasAttribute("title")
+      ? fileTextA.getAttribute("title")
+      : fileTextA.textContent;
 
   _file.url = fileTextA.href;
 
-  const sizeRegexMatch = e.querySelector(".fileText").textContent.match(sizeRegex);
+  const sizeRegexMatch = fileText.textContent.match(sizeRegex);
 
   _file.size = parseFileSize(sizeRegexMatch[1]);
   _file.width = parseInt(sizeRegexMatch[2]);

@@ -17,13 +17,15 @@ npm install 4chan-full
 - [Custom Request Handler](https://example.com/) (`new FourChanFull(yourHandler)`);
 
 - [Get Thread](https://example.com/ "Example Result") (`.thread(boardCode, threadId)`)
+- [Watching Thread for Updates](https://example.com/ "Example Result") (`.threadWatcher(boardCode, threadId, [options])`);
 - [Get Board](https://example.com/ "Example Result") (`.board(boardCode, page)`)
 - [Get Archive](https://example.com/ "Example Result") (`.archive(boardCode)`)
 - [Get Popular Threads](https://example.com/ "Example Result") (`.popular(safetyType)`)
 - [Get Stats](https://example.com/ "Example Result") (`.stats()`)
 - [Board List](https://example.com/ "Example Result") (`.boards`)
 
-### Example Code
+
+### Example Codes
 
 That small script lists all files of the thread..
 
@@ -44,11 +46,37 @@ const { fchf } = require("4chan-full");
 })();
 ```
 
+That small script watches the thread for new replies..
+
+```js
+const { fchf } = require("4chan-full");
+
+(async () => {
+  let watcher = fchf.threadWatcher("vg", "337012489");
+
+  // Events: updated, nowUpdated, checked, error, #start, #stop
+
+  watcher.on("updated", (oldThread, newThread) => {
+    console.log({ oldThread, newThread });
+  });
+
+  watcher.on("notUpdated", () => {
+    console.log("there is no new replies..");
+  });
+
+  watcher.on("checked", (oldThread, newThread) => {
+    console.log("checked new checkInterval:", watcher.checkInterval);
+  });
+
+  watcher.start();
+})();
+```
+
 ## TODO
 
 - [x] Full Code REWRITE
 - [x] Parse Message Contents (Quotes etc.)
-- [ ] Thread Update Watcher
+- [x] Thread Update Watcher
 - [ ] Board Update Watcher
 
 ## Type List
@@ -67,6 +95,11 @@ const { fchf } = require("4chan-full");
 - [SemiThread](https://github.com/TheArmagan/4chan-full/tree/master/src/types/SemiThread.js)
 - [Stats](https://github.com/TheArmagan/4chan-full/tree/master/src/types/Stats.js)
 - [Thread](https://github.com/TheArmagan/4chan-full/tree/master/src/types/Thread.js)
+
+## HUGE Update 1.2.0
+ - Thread Watcher
+ - Update Boards
+ - Bug fixes
 
 ### Update 1.1.1
 

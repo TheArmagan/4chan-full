@@ -1,6 +1,21 @@
-let { fchf } = require("./index");
+const sleep = require("stuffs/lib/sleep");
+let { fchf } = require(".");
+let fs = require("fs");
 
 (async () => {
-  const thread = await fchf.thread("gd", "401824");
-  console.log(require("util").inspect(thread, false, 16, true));
+  let watcher = fchf.threadWatcher("vg", "337012489");
+
+  watcher.on("updated", (oldThread, newThread) => {
+    console.log({ oldThread, newThread });
+  });
+
+  watcher.on("notUpdated", () => {
+    console.log("there is no new replies.. Checking for", Date.now()-watcher.startTime, "miliseconds..");
+  });
+
+  watcher.on("checked", (oldThread, newThread) => {
+    console.log("checked new checkInterval:", watcher.checkInterval);
+  });
+
+  watcher.start();
 })();

@@ -16,6 +16,7 @@ class FourChanFull {
   _request = defaultRequest;
 
   static boards = boards;
+  boards = boards;
 
   /**
    * @param {defaultRequest} request
@@ -29,16 +30,23 @@ class FourChanFull {
   /**
    * @param {String} boardCode 
    * @param {String} threadId 
+   * @param {{checkIntervalMin:number,checkIntervalMax:number,checkIntervalAdder:number}} options
    */
-  createThreadWatcher(boardCode, threadId) {
-    let watcher = new ThreadWatcher(this, boardCode, threadId);
+  threadWatcher(boardCode, threadId, options={}) {
+    let watcher = new ThreadWatcher(this, {
+      boardCode,
+      threadId,
+      checkIntervalMin: options.checkIntervalMin,
+      checkIntervalMax: options.checkIntervalMax,
+      checkIntervalAdder: options.checkIntervalAdder
+    });
     return watcher;
   }
 
-/**
-* @param {String} boardCode
-* @param {Number} pageNumber (1-10)
-*/
+  /**
+   * @param {String} boardCode
+   * @param {Number} pageNumber (1-10)
+   */
   async board(boardCode, pageNumber = 1) {
     const board = findBoard(boardCode);
     if (!board) throw "Invalid board.";

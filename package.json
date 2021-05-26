@@ -1,28 +1,4 @@
 {
-  "_from": "4chan-full",
-  "_id": "4chan-full@1.0.72",
-  "_inBundle": false,
-  "_integrity": "sha512-pwIjr/EC5gI28qjaxXyMHqI/qVoQuJc2wp8vM9lRrdtAG1waEJTRkclz0U9Cg374tOq/1F1oEUDCCnpazM51sw==",
-  "_location": "/4chan-full",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "4chan-full",
-    "name": "4chan-full",
-    "escapedName": "4chan-full",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/4chan-full/-/4chan-full-1.0.72.tgz",
-  "_shasum": "0e3267f40a1af1fb47595a5e1556bccf47abfc6f",
-  "_spec": "4chan-full",
-  "_where": "D:\\BDT\\Desktop\\Projelerim\\JavaScript\\4chan-full",
   "author": {
     "name": "Kıraç Armağan Önal"
   },
@@ -32,10 +8,11 @@
   "bundleDependencies": false,
   "dependencies": {
     "got": "^11.4.0",
-    "jsdom": "^16.2.2"
+    "jsdom": "^16.2.2",
+    "stuffs": "^0.1.2"
   },
   "deprecated": false,
-  "description": "www.4chan.org non-official read only api",
+  "description": "www.4chan.org non-official read only api. That supports cool things!",
   "devDependencies": {},
   "homepage": "https://github.com/Armagann/4chan-full#readme",
   "keywords": [
@@ -44,7 +21,11 @@
     "full",
     "readonly",
     "4chan-full",
-    "easy"
+    "easy",
+    "watcher",
+    "thread",
+    "board",
+    "archive"
   ],
   "license": "GNU GPLv3",
   "main": "index.js",
